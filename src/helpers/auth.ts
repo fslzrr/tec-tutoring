@@ -9,11 +9,7 @@ async function signup(email: string, password: string) {
 }
 
 async function login(email: string, password: string) {
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-  } catch (error) {
-    console.error(error);
-  }
+  await auth.signInWithEmailAndPassword(email, password);
 }
 
 async function logout() {

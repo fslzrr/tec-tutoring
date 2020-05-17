@@ -1,6 +1,6 @@
 import React from "react";
-import { PageType } from "../App";
 import Button from "../core/Button";
+import { PageType, PageKey } from ".";
 
 const Signup: React.FunctionComponent<PageType> = (props) => {
   return (
@@ -12,7 +12,7 @@ const Signup: React.FunctionComponent<PageType> = (props) => {
       <p>
         <br></br>
       </p>
-      <Button onClick={() => props.to("Login")}>Login</Button>
+      <Button onClick={() => props.to(PageKey.Login)}>Login</Button>
     </div>
   );
 };
