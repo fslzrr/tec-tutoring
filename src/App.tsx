@@ -1,39 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ThemeContext from "./theme/themeContext";
 import styles from "./App.module.scss";
 import Header from "./core/Header";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 
-type PageType = {
-  to: (page: string, title?: string) => void;
-  toggleTheme: () => void;
-};
+import { useCurrentUser } from "./helpers/users";
+import { PageKey, PageTitles, Pages } from "./pages";
 
-const pages: { [key: string]: React.ComponentType<PageType> } = {
-  Login,
-  Signup,
-};
-
-const titles: { [key: string]: string } = {
-  Login: "Welcome to Tec Tutoring",
-  Signup: "Create a new account",
-};
+const themeClass = (
+  styles: { readonly [key: string]: string },
+  theme: string
+) => `${styles[`theme-${theme}`]}`;
 
 const App: React.FunctionComponent<{}> = () => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [page, setPage] = useState("Login");
+  const [page, setPage] = useState<PageKey>(PageKey.Login);
   const [title, setTitle] = useState("Welcome to Tec Tutoring");
+  const currentUser = useCurrentUser()
 
-  const themeClass = (
-    styles: { readonly [key: string]: string },
-    theme: string
-  ) => `${styles[`theme-${theme}`]}`;
+  useEffect(() => {
+    if (currentUser) {
+      switch(currentUser.type) {
+        case "professor":
+          to(PageKey.ProfessorHome)
+          break
+        case "student":
+          to(PageKey.StudentHome)
+          break
+      }
+    } else if (currentUser === null) {
+      to(PageKey.Login)
+    }
+  }, [currentUser])
 
-  const to = (page: string, title?: string) => {
+
+  const to = (page: PageKey, title?: string) => {
     setPage(page);
-    setTitle(title === undefined ? titles[page] : title);
+    setTitle(title === undefined ? PageTitles[page] : title);
   };
 
   const toggleTheme = () => {
@@ -41,7 +44,7 @@ const App: React.FunctionComponent<{}> = () => {
     else setTheme("light");
   };
 
-  const Page = pages[page];
+  const Page = Pages[page];
 
   return (
     <ThemeContext.Provider value={{ theme, themeClass }}>
@@ -55,5 +58,4 @@ const App: React.FunctionComponent<{}> = () => {
   );
 };
 
-export type { PageType };
 export default App;
