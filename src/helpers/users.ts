@@ -5,7 +5,7 @@ import { UserCollection } from "../data/collections";
 import { User } from "../models/User";
 
 export function useCurrentUser<T extends User>() {
-  const [currentUser, setCurrentUser] = useState<T|null|undefined>(undefined)
+  const [currentUser, setCurrentUser] = useState<T | null | undefined>(undefined)
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
       if (user) {
@@ -13,13 +13,12 @@ export function useCurrentUser<T extends User>() {
           .get()
           .then((ref) => {
             const data = (ref as firestore.DocumentSnapshot<T>).data()
-              setCurrentUser({ uid: user.uid, ...data } as T || null)
+            setCurrentUser({ uid: user.uid, ...data } as T || null)
           })
       } else {
         setCurrentUser(null)
       }
     })
   }, [])
-
   return currentUser
 }
