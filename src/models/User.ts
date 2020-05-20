@@ -1,5 +1,6 @@
 export interface User {
   uid: string;
+  displayName: string;
   type: 'student' | 'professor';
 }
 export interface Professor extends User {
