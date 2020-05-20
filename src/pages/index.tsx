@@ -3,6 +3,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import ProfessorHome from "./ProfessorHome";
 import StudentHome from "./StudentHome";
+import ActiveSession from "./ActiveSession";
 
 export enum PageKey {
   Login = 'Login',
@@ -22,7 +23,7 @@ export const Pages: { [k in PageKey]: React.ElementType<PageType> } = {
   Signup,
   ProfessorHome: ProfessorHome,
   StudentHome: StudentHome,
-  ActiveSession: () => <div></div>
+  ActiveSession: ActiveSession
 };
 
 export const PageTitles: { [key in PageKey]: string } = {
