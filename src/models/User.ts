@@ -5,6 +5,7 @@ export interface User {
 }
 export interface Professor extends User {
   area: string;
+  location: string;
 }
 export interface Student extends User {
 }

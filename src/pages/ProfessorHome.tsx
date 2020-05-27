@@ -1,14 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { PageType } from "."
-import Button from "../core/Button"
 import { SessionCollection } from "../data/collections"
-import { useCurrentUser } from "../helpers/users"
+import { useCurrentUser, saveLocation } from "../helpers/users"
 import { Professor } from "../models/User"
 import { Session } from "../models/Session"
 import { startSession } from "../helpers/sessions"
 
-function getQuailfyingSessionsForCurrentUser(area: string) {
+function getQuailfyingSessionsForCurrentUser() {
   return SessionCollection.where('pending', '==', true)
 }
 
@@ -16,16 +15,41 @@ function getUniqueAreasFromSessions(sessions: Session[] | undefined) {
   return sessions ? Array.from(new Set(sessions.map(s => s.area))).sort() : ['']
 }
 
+// TODO: Add active sessions on the right.
 const ProfessorHome: React.FunctionComponent<PageType> = () => {
   const user = useCurrentUser<Professor>()
   const [values] = useCollectionData<Session>(
-    getQuailfyingSessionsForCurrentUser(user?.area || ''), { idField: 'id' })
-
+    getQuailfyingSessionsForCurrentUser(), { idField: 'id' })
   const areas: Array<string> = getUniqueAreasFromSessions(values)
   const [area, setArea] = useState(areas[0] ? areas[0] : 'none')
+  const [location, setLocation] = useState('')
+
+  // setState when dependecy user changes.
+  useEffect(() => setLocation(user?.location || 'biblio'), [user])
+
+  const onSaveLocationClicked = () => {
+    if (!user || !location) return user
+    saveLocation(user as Professor, location)
+      .then(() => {
+        user.location = location
+        console.log("Saved location " + user.location + ".")
+      })
+  }
 
   return (
     <div>
+      <div>
+        <label>Location:
+        <input
+            name="location"
+            placeholder="ubicacion de asesoria"
+            value={location}
+            onChange={event => setLocation(event.target.value)} />
+        </label>
+        <button
+          disabled={!location}
+          onClick={onSaveLocationClicked}>Save</button>
+      </div>
       <div>
         <select
           id="dropdown"
@@ -46,7 +70,7 @@ const ProfessorHome: React.FunctionComponent<PageType> = () => {
           // HOTFIX: Added none as default selector.
           s.area === area &&
           <li key={s.id}>{s.student}
-            <Button onClick={() => startSession(s.id, user.uid)}>Aceptar</Button>
+            <button onClick={() => startSession(s.id, user)}>Aceptar</button>
           </li>
         )}
       </div>

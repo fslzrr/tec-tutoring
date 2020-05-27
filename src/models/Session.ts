@@ -3,5 +3,6 @@ export interface Session {
   student: string;
   area: string;
   professor: string;
+  location: string;
   pending: boolean;
 }

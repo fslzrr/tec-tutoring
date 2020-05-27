@@ -3,6 +3,7 @@ import { firestore } from "firebase";
 import { auth } from "../config/firebase";
 import { UserCollection } from "../data/collections";
 import { User } from "../models/User";
+import { Professor } from "../models/User"
 
 export function useCurrentUser<T extends User>() {
   const [currentUser, setCurrentUser] = useState<T | null | undefined>(undefined)
@@ -21,4 +22,10 @@ export function useCurrentUser<T extends User>() {
     })
   }, [])
   return currentUser
+}
+
+export function saveLocation(professor: Professor, location: string) {
+  return UserCollection.doc(professor.uid).update({
+    location: location,
+  } as Professor)
 }
