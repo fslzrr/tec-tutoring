@@ -15,10 +15,13 @@ export const helloWorld = functions.https.onRequest(
 
 exports.createProfile = functions.auth.user().onCreate((user, context) => {
   const userEmail = user.email
-  // defaults to student
+  // defaults to "student"
   var userType = "student"
   // defaults to ms since epoch
   var userDisplayName = Date.now().toString()
+  // defaults to "biblio"
+  var location = "biblio"
+
 
   if (userEmail && userEmail.charAt(0).toUpperCase() == 'L') {
     userType = "professor"
@@ -32,7 +35,8 @@ exports.createProfile = functions.auth.user().onCreate((user, context) => {
     .set({
       email: user.email,
       displayName: userDisplayName,
-      type: userType
+      type: userType,
+      location: location, // nasty hotfix, adds location to every type of user instead of professors only
     }).then(writeResult => {
       console.log("Created new user with display name: \"" + userDisplayName + "\"!")
     });
