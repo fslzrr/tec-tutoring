@@ -14,7 +14,7 @@ export function MainRouter() {
     <BrowserRouter>
       <Switch>
         {!currentUser && <>
-          <Route path="/login" component={Login} />}
+          <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Redirect to="/signup" />
         </>}

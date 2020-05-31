@@ -3,6 +3,7 @@ import { Button, Text, Flex } from "rebass";
 import { Label, Input } from "@rebass/forms"
 import { useForm } from "react-hook-form"
 import { signup } from '../helpers/auth'
+import { useHistory } from "react-router";
 
 // todo handle errors si sobra tiempo
 function useSignup() {
@@ -25,6 +26,7 @@ type FormProps = {
 const Signup = () => {
   const { register, handleSubmit } = useForm()
   const { doSignup, error } = useSignup()
+  const { push } = useHistory()
 
   return (
     <Flex
@@ -43,7 +45,7 @@ const Signup = () => {
         <Button mt={5} type="submit">Crear Cuenta</Button>
         {error && <span>TODO AGREGAR ERROR</span>}
         <Text m={3} textAlign="center">o</Text>
-        <Button>Ir a iniciar sesión</Button>
+        <Button onClick={() => push('/login')}>Ir a iniciar sesión</Button>
     </Flex>
   );
 };
