@@ -20,9 +20,12 @@ const ActiveSession: React.FunctionComponent<PageType> = (props) => {
             {user && values && values.map(s =>
                 <li key={s.id}>
                     <p>
+                        SessionID: {s.id} <br></br>
                         StudentID: {s.student} <br></br>
+                        ProfessorID: {s.professor} <br></br>
                         Area: {s.area} <br></br>
-                        Pending: {s.pending && "True"} <br></br>
+                        Location: {s.location} <br></br>
+                        Pending: {s.pending && "True"} {!s.pending && "In Progress..."} <br></br>
                     </p>
                 </li>
             )}
