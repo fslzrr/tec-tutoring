@@ -1,6 +1,5 @@
 import React from "react"
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { PageType } from "."
 import { SessionCollection } from "../data/collections"
 import { useCurrentUser } from "../helpers/users"
 import { Session } from "../models/Session"
@@ -10,7 +9,7 @@ function getQuailfyingSessionsForCurrentUser(id: string) {
     return SessionCollection.where('student', '==', id)
 }
 
-const ActiveSession: React.FunctionComponent<PageType> = (props) => {
+const ActiveSession = () => {
     const user = useCurrentUser<Student>()
     const [values] = useCollectionData<Session>(
         getQuailfyingSessionsForCurrentUser(user?.uid || ''), { idField: 'id' })

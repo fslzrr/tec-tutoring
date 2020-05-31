@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { PageType } from "."
 import { SessionCollection } from "../data/collections"
 import { useCurrentUser, saveLocation } from "../helpers/users"
 import { Professor } from "../models/User"
@@ -20,7 +19,7 @@ function getUniqueAreasFromSessions(sessions: Session[] | undefined) {
 }
 
 // TODO: Add active sessions on the right.
-const ProfessorHome: React.FunctionComponent<PageType> = () => {
+const ProfessorHome = () => {
   const user = useCurrentUser<Professor>()
   const [pendingSessions] = useCollectionData<Session>(getPendingSessions(), { idField: 'id' })
   const [activeSessions] = useCollectionData<Session>(

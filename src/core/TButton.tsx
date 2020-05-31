@@ -7,7 +7,7 @@ type ButtonType = {
   onClick: (event?: React.MouseEvent) => void;
 };
 
-const Button: React.FunctionComponent<ButtonType> = (props) => {
+const TButton: React.FunctionComponent<ButtonType> = (props) => {
   return (
     <ThemeContext.Consumer>
       {({ themeClass, theme }) => (
@@ -22,4 +22,4 @@ const Button: React.FunctionComponent<ButtonType> = (props) => {
   );
 };
 
-export default Button;
+export default TButton;

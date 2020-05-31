@@ -1,35 +1,30 @@
-import React from "react"
-import Login from "./Login";
-import Signup from "./Signup";
-import ProfessorHome from "./ProfessorHome";
-import StudentHome from "./StudentHome";
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { useCurrentUser } from "../helpers/users";
 import ActiveSession from "./ActiveSession";
+import Login from "./Login";
+import ProfessorHome from "./ProfessorHome";
+import Signup from "./Signup";
+import StudentHome from "./StudentHome";
 
-export enum PageKey {
-  Login = 'Login',
-  Signup = 'Signup',
-  ProfessorHome = 'ProfessorHome',
-  StudentHome = 'StudentHome',
-  ActiveSession = 'ActiveSession'
+export function MainRouter() {
+  const currentUser = useCurrentUser()
+
+  return (
+    <BrowserRouter>
+      <Switch>
+        {!currentUser && <>
+          <Route path="/login" component={Login} />}
+          <Route path="/signup" component={Signup} />
+          <Redirect to="/login" />
+        </>}
+        {currentUser && <>
+          {currentUser.type === "professor" && <Route path="/home" component={ProfessorHome} /> }
+          {currentUser.type === "student" && <Route path="/home" component={StudentHome} />}
+          <Route path="/active-session" component={ActiveSession} />
+          <Redirect to="/home" />
+        </>}
+      </Switch>
+    </BrowserRouter>
+  )
 }
-
-export type PageType = {
-  to: (page: PageKey, title?: string) => void;
-  toggleTheme: () => void;
-};
-
-export const Pages: { [k in PageKey]: React.ElementType<PageType> } = {
-  Login,
-  Signup,
-  ProfessorHome: ProfessorHome,
-  StudentHome: StudentHome,
-  ActiveSession: ActiveSession
-};
-
-export const PageTitles: { [key in PageKey]: string } = {
-  Login: "Welcome to Tec Tutoring",
-  Signup: "Create a new account",
-  ProfessorHome: "ProfessorHome",
-  StudentHome: "StudentHome",
-  ActiveSession: "ActiveSession",
-};

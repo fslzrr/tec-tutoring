@@ -1,13 +1,11 @@
 import React, { useState } from "react"
-import { PageKey, PageType } from "."
 import { createSession } from "../helpers/sessions"
 import { useCurrentUser } from "../helpers/users"
 import { Student } from "../models/User"
 import { useForm } from "react-hook-form"
 
 
-
-const StudentHome: React.FunctionComponent<PageType> = (props) => {
+const StudentHome = () => {
   const { register } = useForm()
   const [materia, setMateria] = useState('ciencias');
   const user = useCurrentUser<Student>()
@@ -15,7 +13,6 @@ const StudentHome: React.FunctionComponent<PageType> = (props) => {
   const onCreateSessionClicked = () => {
     createSession(materia, user!!.uid)
       .then(() => {
-        props.to(PageKey.ActiveSession)
       })
   }
 

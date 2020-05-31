@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
+import { Box, Button } from "rebass"
 import { login } from '../helpers/auth'
-import Button from "../core/Button"
-import { PageKey, PageType } from "."
 
 
 // todo handle errors si sobra tiempo
@@ -23,12 +22,12 @@ type FormProps = {
   password: string
 }
 
-const Login: React.FunctionComponent<PageType> = (props) => {
+const Login = () => {
   const { register, handleSubmit } = useForm()
   const { doLogin, error } = useLogin()
 
   return (
-    <div>
+    <Box bg="">
       <form onSubmit={handleSubmit(doLogin as any)}>
         <label>
           Correo
@@ -48,8 +47,8 @@ const Login: React.FunctionComponent<PageType> = (props) => {
       <p>
         <br></br>
       </p>
-      <Button onClick={() => props.to(PageKey.Signup)}>Signup</Button>
-    </div>
+      <Button>Signup</Button>
+    </Box>
   );
 };
 

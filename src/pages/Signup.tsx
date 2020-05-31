@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import Button from "../core/Button";
-import { PageType, PageKey } from ".";
+import { Button } from "rebass";
 import { useForm } from "react-hook-form"
 import { signup } from '../helpers/auth'
 
@@ -22,7 +21,7 @@ type FormProps = {
   password: string
 }
 
-const Signup: React.FunctionComponent<PageType> = (props) => {
+const Signup = () => {
   const { register, handleSubmit } = useForm()
   const { doSignup, error } = useSignup()
 
@@ -48,7 +47,7 @@ const Signup: React.FunctionComponent<PageType> = (props) => {
       <p>
         <br></br>
       </p>
-      <Button onClick={() => props.to(PageKey.Login)}>Login</Button>
+      <Button>Login</Button>
     </div>
   );
 };
