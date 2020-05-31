@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Box, Button, Flex, Text } from "rebass"
+import { Button, Flex, Text } from "rebass"
 import { Label, Input } from "@rebass/forms"
 import { login } from '../helpers/auth'
 
@@ -45,7 +45,7 @@ const Login = () => {
         {error && <span>TODO AGREGAR ERROR</span>}
 
         <Text m={3} textAlign="center">o</Text>
-        <Button>Crear Cuenta</Button>
+        <Button>Crear una Cuenta</Button>
     </Flex>
   );
 };

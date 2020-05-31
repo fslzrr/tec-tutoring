@@ -16,7 +16,7 @@ export function MainRouter() {
         {!currentUser && <>
           <Route path="/login" component={Login} />}
           <Route path="/signup" component={Signup} />
-          <Redirect to="/login" />
+          <Redirect to="/signup" />
         </>}
         {currentUser && <>
           {currentUser.type === "professor" && <Route path="/home" component={ProfessorHome} /> }

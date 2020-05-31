@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { Button } from "rebass";
+import { Button, Text, Flex } from "rebass";
+import { Label, Input } from "@rebass/forms"
 import { useForm } from "react-hook-form"
 import { signup } from '../helpers/auth'
 
@@ -7,7 +8,7 @@ import { signup } from '../helpers/auth'
 function useSignup() {
   const [error, setError] = useState<boolean>(false)
 
-  function doSignup ({ email, password }: FormProps) {
+  function doSignup({ email, password }: FormProps) {
     setError(false)
     signup(email, password)
       .catch(() => setError(true))
@@ -26,29 +27,24 @@ const Signup = () => {
   const { doSignup, error } = useSignup()
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(doSignup as any)}>
-        <label>
-          Correo
-          <input name="email" ref={register({ required: true })} />
-        </label>
-        <label>
-          Contraseña
-          <input name="password" type="password" ref={register({ required: true })} />
-        </label>
-        <button type="submit">
-          Crear cuenta
-        </button>
-      </form>
-
-      {error && <span>TODO AGREGAR ERROR</span>}
-
-      <p>¿Ya tienes una cuenta?</p>
-      <p>
-        <br></br>
-      </p>
-      <Button>Login</Button>
-    </div>
+    <Flex
+      flexDirection="column"
+      as='form'
+      bg=""
+      mx="auto"
+      maxWidth={500}
+      mt={5}
+      p={2}
+      onSubmit={handleSubmit(doSignup as any)}>
+        <Label mt={2} mb={2}>Correo</Label>
+        <Input name="email" ref={register({ required: true })} />
+        <Label mt={2} mb={2}>Contraseña</Label>
+        <Input name="password" type="password" ref={register({ required: true })} />
+        <Button mt={5} type="submit">Crear Cuenta</Button>
+        {error && <span>TODO AGREGAR ERROR</span>}
+        <Text m={3} textAlign="center">o</Text>
+        <Button>Ir a iniciar sesión</Button>
+    </Flex>
   );
 };
 //TODO: agregar feedback de que si se creó bien
