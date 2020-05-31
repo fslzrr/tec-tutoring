@@ -5,6 +5,9 @@ import { Student } from "../models/User"
 import { useForm } from "react-hook-form"
 import { Button, Flex, Text, Card } from "rebass"
 import { Label, Input } from "@rebass/forms"
+import { useCollectionData } from "react-firebase-hooks/firestore"
+import { SessionCollection } from "../data/collections"
+import { Session } from "../models/Session"
 
 
 const SuccessModal = (props: { onButtonClicked: () => any }) => (
@@ -21,45 +24,72 @@ const SuccessModal = (props: { onButtonClicked: () => any }) => (
   </Flex>
 )
 
+function getActiveSessionsOfCurrentUser(studentId: string) {
+  return SessionCollection.where('student', '==', studentId)
+}
+
 const StudentHome = () => {
   const { register } = useForm()
-  const [materia, setMateria] = useState('ciencias')
-  const [showConfirmationModal, setShowConfirmationModal] = useState(true)
-
   const user = useCurrentUser<Student>()
+  const [materia, setMateria] = useState('ciencias')
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [session] = useCollectionData<Session>(getActiveSessionsOfCurrentUser(user?.uid || ''))
 
   const onCreateSessionClicked = () => {
+    setShowConfirmationModal(true)
     createSession(materia, user!!.uid)
-      .then(() => setShowConfirmationModal(true))
+      .then(() => {})
   }
 
   return (
-    <div>
+    <Card
+      mx="auto"
+      maxWidth={600}
+      mt={5}>
       {showConfirmationModal && <SuccessModal onButtonClicked={() => setShowConfirmationModal(false)} />}
       <Flex
           flexDirection="column"
           bg=""
-          mx="auto"
-          maxWidth={600}
-          mt={5}
           p={2}>
-        <Text fontSize={5} mb={4}>Iniciar nueva asesoria</Text>
-        <Label mb={4}>Materia:</Label>
-        <Input
-          mb={4}
-          name="area"
-          placeholder="materia"
-          value={materia}
-          onChange={event => setMateria(event.target.value)}
-          ref={register({ required: true })} />
-          <Button
-            alignSelf="baseline"
-            disabled={!materia}
-            onClick={onCreateSessionClicked}>
-              Empezar Nueva Asesoria
-          </Button>
+
+        {session?.length === 0 && <>
+          <Text fontSize={5} mb={4}>Iniciar nueva asesoria</Text>
+          <Label mb={4}>Materia:</Label>
+          <Input
+            mb={4}
+            name="area"
+            placeholder="materia"
+            value={materia}
+            onChange={event => setMateria(event.target.value)}
+            ref={register({ required: true })} />
+            <Button
+              alignSelf="baseline"
+              disabled={!materia}
+              onClick={onCreateSessionClicked}>
+                Empezar Nueva Asesoria
+            </Button>
+          </>}
+
+          {session?.length !== 0 && <>
+            {session && !session[0].pending && <>
+              <Text fontSize={5} mb={4}>Asesoria en curso</Text>
+              <Text fontSize={4}>Area:</Text>
+              <Text>{session[0].area}</Text>
+              <Text mt={3} fontSize={4}>Ubicación:</Text>
+              <Text>{session[0].location}</Text>
+              <Text mt={3} fontSize={4}>Nombre del profesor:</Text>
+              <Text>{session[0].professorName}</Text>
+            </>}
+            {session && session[0].pending && <>
+              <Text fontSize={5} mb={4}>Asesoria en espera de un profesor</Text>
+              <Text fontSize={4}>Area:</Text>
+              <Text>{session[0].area}</Text>
+              <Text mt={3} fontSize={4}>Ubicación:</Text>
+              <Text>{session[0].location}</Text>
+            </>}
+          </>}
       </Flex>
-    </div>
+    </Card>
   );
 };
 
