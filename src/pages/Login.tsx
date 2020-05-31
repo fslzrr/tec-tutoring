@@ -1,12 +1,11 @@
+import { Input, Label } from "@rebass/forms"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Button, Flex, Text } from "rebass"
-import { Label, Input } from "@rebass/forms"
-import { login } from '../helpers/auth'
 import { useHistory } from "react-router"
+import { Button, Card, Flex, Text } from "rebass"
+import { login } from '../helpers/auth'
 
 
-// todo handle errors si sobra tiempo
 function useLogin() {
   const [error, setError] = useState<boolean>(false)
 
@@ -39,13 +38,15 @@ const Login = () => {
       mt={5}
       p={2}
       onSubmit={handleSubmit(doLogin as any)}>
+        {error &&
+        <Card bg="red" color="#FFFFFF" p={2}>
+          <Text textAlign="center">El correo o la contraseña no son correctas. </Text>
+        </Card>}
         <Label mt={2} mb={2}>Correo</Label>
         <Input name="email" ref={register({ required: true })} />
         <Label mt={2} mb={2}>Contraseña</Label>
         <Input name="password" type="password" ref={register({ required: true })} />
         <Button mt={5} type="submit">Iniciar sesión</Button>
-        {error && <span>TODO AGREGAR ERROR</span>}
-
         <Text m={3} textAlign="center">o</Text>
         <Button onClick={() => push("/signup")}>Crear una Cuenta</Button>
     </Flex>
