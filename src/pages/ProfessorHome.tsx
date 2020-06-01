@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from "react"
+import { Input, Select } from "@rebass/forms"
+import { firestore } from "firebase"
+import moment from 'moment'
+import React, { useState } from "react"
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { SessionCollection } from "../data/collections"
-import { useCurrentUser, saveLocation } from "../helpers/users"
-import { Professor } from "../models/User"
-import { Session } from "../models/Session"
-import { startSession } from "../helpers/sessions"
-import { Select, Input } from "@rebass/forms"
-import { Button, Card, Text, Box, Flex } from "rebass"
 import { useForm } from "react-hook-form"
+import { Button, Card, Flex, Text } from "rebass"
+import { SessionCollection } from "../data/collections"
+import { startSession } from "../helpers/sessions"
+import { useCurrentUser } from "../helpers/users"
+import { Session } from "../models/Session"
+import { Professor } from "../models/User"
 
+const now = new Date()
 function getActiveSessionsOfCurrentUser(professorId: string) {
-  return SessionCollection.where('professor', '==', professorId)
+  return SessionCollection.where('endDate', '>', now)
+    .where('professor', '==', professorId)
+    .orderBy("endDate")
 }
+
+SessionCollection.where('endDate', '>', now)
+    .where('professor', '==', "asdf")
+    .orderBy("endDate")
+    .onSnapshot(() => {})
 
 function getPendingSessions() {
   return SessionCollection.where('pending', '==', true)
@@ -19,6 +29,12 @@ function getPendingSessions() {
 
 function getUniqueAreasFromSessions(sessions: Session[] | undefined) {
   return sessions ? Array.from(new Set(sessions.map(s => s.area))).sort() : ['']
+}
+
+function formatDateRange(t1: firestore.Timestamp, t2: firestore.Timestamp, ) {
+  const m1 = moment(t1.toDate())
+  const m2 = moment(t2.toDate())
+  return `${m1.format('hh:mm A')} - ${m2.format('hh:mm A')}`
 }
 
 const SuccessModal = (props: { onSubmit: (location: string) => any }) => {
@@ -97,6 +113,8 @@ const ProfessorHome = () => {
             <Text>{activeSessions[0].location}</Text>
             <Text mt={3} fontSize={4}>Nombre del alumno:</Text>
             <Text>{activeSessions[0].studentName}</Text>
+            <Text mt={3} fontSize={4}>Horario:</Text>
+            <Text>{formatDateRange(activeSessions[0].startDate, activeSessions[0].endDate)}</Text>
           </>}
         </>}
       </Card>

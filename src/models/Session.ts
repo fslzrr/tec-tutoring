@@ -1,3 +1,5 @@
+import { firestore } from 'firebase'
+
 export interface Session {
   id: string;
   student: string;
@@ -7,4 +9,6 @@ export interface Session {
   professorName: string;
   location: string;
   pending: boolean;
+  startDate: firestore.Timestamp
+  endDate: firestore.Timestamp
 }
