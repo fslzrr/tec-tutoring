@@ -9,7 +9,7 @@ function useSignup() {
   const [error, setError] = useState<boolean>(false)
 
   function doSignup({ email, password }: FormProps) {
-    setError(true)
+    setError(false)
     signup(email, password)
       .catch(() => setError(true))
   }
