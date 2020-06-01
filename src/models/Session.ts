@@ -1,5 +1,12 @@
 import { firestore } from 'firebase'
 
+// Used this instead of enum, cause enum was giving trouble with firestore
+export const kSessionState = {
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE",
+  ENDED: "ENDED",
+}
+
 export interface Session {
   id: string;
   student: string;
@@ -9,6 +16,7 @@ export interface Session {
   professorName: string;
   location: string;
   pending: boolean;
-  startDate: firestore.Timestamp
-  endDate: firestore.Timestamp
+  sessionState: string;
+  startDate: firestore.Timestamp;
+  endDate: firestore.Timestamp;
 }

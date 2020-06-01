@@ -6,9 +6,9 @@ import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useForm } from "react-hook-form"
 import { Button, Card, Flex, Text } from "rebass"
 import { SessionCollection } from "../data/collections"
-import { startSession } from "../helpers/sessions"
+import { startSession, endSession } from "../helpers/sessions"
 import { useCurrentUser } from "../helpers/users"
-import { Session } from "../models/Session"
+import { Session, kSessionState } from "../models/Session"
 import { Professor } from "../models/User"
 
 const now = new Date()
@@ -18,8 +18,7 @@ function getActiveSessionsOfCurrentUser(professorId: string) {
     .orderBy("endDate")
 }
 function getPendingSessions() {
-  return SessionCollection.where('endDate', '>', now)
-    .where('pending', '==', true)
+  return SessionCollection.where('sessionState', '==', kSessionState.PENDING)
 }
 
 function getUniqueAreasFromSessions(sessions: Session[] | undefined) {
@@ -75,6 +74,10 @@ const ProfessorHome = () => {
     setShowConfirmModal(true)
   }
 
+  const terminateSession = (sessionId: string) => {
+    endSession(sessionId)
+  }
+
   return (
     <div>
       {showConfirmModal && <SuccessModal onSubmit={saveLocation} />}
@@ -100,7 +103,7 @@ const ProfessorHome = () => {
           </div>}
         </>}
         {activeSessions?.length !== 0 && <>
-          {activeSessions && !activeSessions[0].pending && <>
+          {activeSessions && activeSessions[0].sessionState === kSessionState.ACTIVE && <>
             <Text fontSize={5} mb={4}>Asesoria en curso</Text>
             <Text fontSize={4}>Area:</Text>
             <Text>{activeSessions[0].area}</Text>
@@ -110,6 +113,7 @@ const ProfessorHome = () => {
             <Text>{activeSessions[0].studentName}</Text>
             <Text mt={3} fontSize={4}>Horario:</Text>
             <Text>{formatDateRange(activeSessions[0].startDate, activeSessions[0].endDate)}</Text>
+            <Button mt={3} bg="red" onClick={() => terminateSession(activeSessions[0].id)}>Terminar Sesión</Button>
           </>}
         </>}
       </Card>

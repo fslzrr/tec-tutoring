@@ -7,7 +7,7 @@ import { Button, Card, Flex, Text } from "rebass"
 import { SessionCollection } from "../data/collections"
 import { createSession, cancelSession } from "../helpers/sessions"
 import { useCurrentUser } from "../helpers/users"
-import { Session } from "../models/Session"
+import { Session, kSessionState } from "../models/Session"
 import { Student } from "../models/User"
 import { firestore } from "firebase"
 
@@ -44,7 +44,7 @@ const StudentHome = () => {
   const user = useCurrentUser<Student>()
   const [materia, setMateria] = useState('ciencias')
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
-  const [session] = useCollectionData<Session>(getActiveSessionsOfCurrentUser(user?.uid || ''), { idField: 'id'})
+  const [session] = useCollectionData<Session>(getActiveSessionsOfCurrentUser(user?.uid || ''), { idField: 'id' })
 
   const onCreateSessionClicked = () => {
     setShowConfirmationModal(true)
@@ -62,7 +62,6 @@ const StudentHome = () => {
         flexDirection="column"
         bg=""
         p={2}>
-
         {session?.length === 0 && <>
           <Text fontSize={5} mb={4}>Iniciar nueva asesoria</Text>
           <Label mb={4}>Materia:</Label>
@@ -82,7 +81,7 @@ const StudentHome = () => {
         </>}
 
         {session?.length !== 0 && <>
-          {session && !session[0].pending && <>
+          {session && session[0].sessionState === kSessionState.ACTIVE && <>
             <Text fontSize={5} mb={4}>Asesoria en curso</Text>
             <Text fontSize={4}>Area:</Text>
             <Text>{session[0].area}</Text>
@@ -91,7 +90,7 @@ const StudentHome = () => {
             <Text mt={3} fontSize={4}>Nombre del profesor:</Text>
             <Text>{session[0].professorName}</Text>
           </>}
-          {session && session[0].pending && <>
+          {session && session[0].sessionState === kSessionState.PENDING && <>
             <Text fontSize={5} mb={4}>Asesoria en espera de un profesor</Text>
             <Text fontSize={4}>Area:</Text>
             <Text>{session[0].area}</Text>
