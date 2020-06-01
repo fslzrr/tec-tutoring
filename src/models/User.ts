@@ -4,10 +4,10 @@ export interface User {
   type: 'student' | 'professor';
 }
 export interface Professor extends User {
-  type: 'student'
+  type: 'professor'
   area: string;
   location: string;
 }
 export interface Student extends User {
-  type: 'professor'
+  type: 'student'
 }
