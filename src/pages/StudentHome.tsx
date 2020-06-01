@@ -37,7 +37,7 @@ const StudentHome = () => {
 
   const onCreateSessionClicked = () => {
     setShowConfirmationModal(true)
-    createSession(materia, user!!.uid)
+    createSession(materia, user!!)
       .then(() => {})
   }
 
