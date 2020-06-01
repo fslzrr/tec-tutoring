@@ -25,7 +25,6 @@ type FormProps = {
 
 const Info = () => {
   const currentUser = useCurrentUser()
-  console.log(currentUser);
   const { register, handleSubmit } = useForm<FormProps>()
   const { UpdateNameStudent } = UpdateDisplayName()
 
@@ -45,7 +44,7 @@ const Info = () => {
         <Input name="dpName" ref={register({ required: true })} />
         <Button mt={5} type="submit">Cambiar nombre</Button>
     </Flex>
-  );      
+  );
 };
 
 export default Info;

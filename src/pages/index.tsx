@@ -8,6 +8,7 @@ import Signup from "./Signup";
 import StudentHome from "./StudentHome";
 import { Flex, Box, Text, Button } from "rebass";
 import { logout } from "../helpers/auth";
+import Info from "./Info";
 
 export function MainRouter() {
   const currentUser = useCurrentUser()
@@ -36,6 +37,7 @@ export function MainRouter() {
             </Box>
             <Button onClick={logout}bg="white" color="primary">Cerrar sesión</Button>
           </Flex>
+          {<Route path="/profile" component={Info} /> }
           {currentUser.type === "professor" && <Route path="/home" component={ProfessorHome} /> }
           {currentUser.type === "student" && <Route path="/home" component={StudentHome} />}
           <Route path="/active-session" component={ActiveSession} />

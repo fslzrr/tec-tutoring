@@ -17,14 +17,9 @@ function getActiveSessionsOfCurrentUser(professorId: string) {
     .where('professor', '==', professorId)
     .orderBy("endDate")
 }
-
-SessionCollection.where('endDate', '>', now)
-    .where('professor', '==', "asdf")
-    .orderBy("endDate")
-    .onSnapshot(() => {})
-
 function getPendingSessions() {
-  return SessionCollection.where('pending', '==', true)
+  return SessionCollection.where('endDate', '>', now)
+    .where('pending', '==', true)
 }
 
 function getUniqueAreasFromSessions(sessions: Session[] | undefined) {
@@ -98,7 +93,7 @@ const ProfessorHome = () => {
             {user && pendingSessions && pendingSessions.map(s =>
               s.area === area &&
               <Flex key={s.id} justifyContent="space-between" mb={2}>
-                <Text>{s.studentName}</Text>
+                <Text>{s.studentName} — {formatDateRange(s.startDate, s.endDate)}</Text>
                 <Button onClick={() => startSessionFlow(s.id)}>Aceptar</Button>
               </Flex>
             )}
