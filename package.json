@@ -22,7 +22,7 @@
     "emotion-theming": "^10.0.27",
     "firebase": "^7.9.3",
     "moment": "^2.26.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-firebase-hooks": "^2.1.1",
